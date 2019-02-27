@@ -1,6 +1,4 @@
-п»ї#include "pch.h"
-
-#define _CRT_SECURE_NO_WARNINGS
+#include "stdafx.h"
 
 #include <stdio.h>
 #include <string.h>
@@ -22,7 +20,7 @@ void delete_char(char* str, char c) {
 
 char* to_change(char* str) {
 	char* output_file_str = str;
-	const char* alphabet = "Р°Р±РІРіРґРµС‘Р¶Р·РёР№РєР»РјРЅРѕРї";
+	const char* alphabet = "абвгдеёжзийклмноп";
 	for (int i = 0; i < strlen(alphabet); i++) {
 		delete_char(output_file_str, alphabet[i]);
 	}
@@ -39,39 +37,45 @@ int main()
 
 	setlocale(LC_ALL, "Russian");
 
-	printf("\n Р’РІРµРґРёС‚Рµ РёРјСЏ С„Р°Р№Р»Р° СЃ СЂР°СЃС€РёСЂРµРЅРёРµРј '.txt': ");
-	scanf("%s", input_name);
+	printf("\n Введите имя файла с расширением '.txt': ");
+	gets_s(input_name, 64);
+	//scanf("%s", input_name);
 
 	while (!strstr(input_name, ".")) {
-		printf("\n РќРµ СѓРєР°Р·Р°РЅРѕ СЂР°СЃС€РёСЂРµРЅРёРµ!");
-		printf("\n Р’РІРµРґРёС‚Рµ РёРјСЏ С„Р°Р№Р»Р° СЃ СЂР°СЃС€РёСЂРµРЅРёРµРј '.txt': ");
-		scanf("%s", input_name);
-	}	
-	while (!strstr(input_name, ".txt")) {
-		printf("\n РЈРєР°Р·Р°РЅРѕ РЅРµРІРµСЂРЅРѕРµ СЂР°СЃС€РёСЂРµРЅРёРµ!");
-		printf("\n Р’РІРµРґРёС‚Рµ РёРјСЏ С„Р°Р№Р»Р° СЃ СЂР°СЃС€РёСЂРµРЅРёРµРј '.txt': ");
-		scanf("%s", input_name);
+		printf("\n Не указано расширение!");
+		printf("\n Введите имя файла с расширением '.txt': ");
+		gets_s(input_name, 64);
+		//scanf("%s", input_name);
 	}
-	
+	while (!strstr(input_name, ".txt")) {
+		printf("\n Указано неверное расширение!");
+		printf("\n Введите имя файла с расширением '.txt': ");
+		gets_s(input_name, 64);
+		//scanf("%s", input_name);
+	}
+
 	input_file = fopen(input_name, "r");
 	while (input_file == NULL) {
-		printf("\n Р¤Р°Р№Р» РЅРµ РЅР°Р№РґРµРЅ!");
-		printf("\n Р’РІРµРґРёС‚Рµ РёРјСЏ С„Р°Р№Р»Р° СЃ СЂР°СЃС€РёСЂРµРЅРёРµРј '.txt': ");
-		scanf("%s", input_name);
+		printf("\n Файл не найден!");
+		printf("\n Введите имя файла с расширением '.txt': ");
+		gets_s(input_name, 64);
+		//scanf("%s", input_name);
 		while (!strstr(input_name, ".")) {
-			printf("\n РќРµ СѓРєР°Р·Р°РЅРѕ СЂР°СЃС€РёСЂРµРЅРёРµ!");
-			printf("\n Р’РІРµРґРёС‚Рµ РёРјСЏ С„Р°Р№Р»Р° СЃ СЂР°СЃС€РёСЂРµРЅРёРµРј '.txt': ");
-			scanf("%s", input_name);
+			printf("\n Не указано расширение!");
+			printf("\n Введите имя файла с расширением '.txt': ");
+			gets_s(input_name, 64);
+			//scanf("%s", input_name);
 		}
 		while (!strstr(input_name, ".txt")) {
-			printf("\n РЈРєР°Р·Р°РЅРѕ РЅРµРІРµСЂРЅРѕРµ СЂР°СЃС€РёСЂРµРЅРёРµ!");
-			printf("\n Р’РІРµРґРёС‚Рµ РёРјСЏ С„Р°Р№Р»Р° СЃ СЂР°СЃС€РёСЂРµРЅРёРµРј '.txt': ");
-			scanf("%s", input_name);
+			printf("\n Указано неверное расширение!");
+			printf("\n Введите имя файла с расширением '.txt': ");
+			gets_s(input_name, 64);
+			//scanf("%s", input_name);
 		}
 		input_file = fopen(input_name, "r");
 	}
 
-	// РР· РёРјСЏ.txt РІ РёРјСЏ.dat
+	// Из имя.txt в имя.dat
 	output_name = input_name;
 	output_name[strlen(input_name) - 3] = '\0';
 	strcat(output_name, "dat");
@@ -81,8 +85,9 @@ int main()
 	fputs(to_change(inFile_str), output_file);
 
 	fclose(input_file);
-	if(output_file != NULL) fclose(output_file);
+	if (output_file != NULL) fclose(output_file);
 
 	system("pause");
 	return 0;
 }
+
