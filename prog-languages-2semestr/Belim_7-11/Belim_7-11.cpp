@@ -1,7 +1,6 @@
 ﻿#include "pch.h"
 
-#define _CRT_SECURE_NO_WARNINGS
-
+//#define _CRT_SECURE_NO_WARNINGS
 
 #include <stdio.h>
 #include <locale.h>
@@ -87,7 +86,7 @@ Kadr** add_kadrs(char* file_name) {
 				column++;
 			}
 		};
-		kadrs[kadr] = tmp_kadr;
+		*(kadrs+kadr) = tmp_kadr;
 		kadr++;
 	}
 	fclose(file);
@@ -97,7 +96,7 @@ Kadr** add_kadrs(char* file_name) {
 int* to_select(char* position, Kadr** kadrs, int count_kadrs) {
 	int count_selected_kadrs = 0;
 	for (int i = 0; i < count_kadrs;i++) {
-		if (strstr(kadrs[i]->position, position)) {
+		if (strstr((*(kadrs+i))->position, position)) {
 			count_selected_kadrs++;
 		}
 	};
@@ -107,8 +106,8 @@ int* to_select(char* position, Kadr** kadrs, int count_kadrs) {
 	selected_indexes[0] = count_selected_kadrs; // Нулевой элемент - кол-во подходящих записей
 	int j = 1;
 	for (int i = 0; i < count_kadrs; i++) {
-		if (strstr(kadrs[i]->position, position)) {
-			selected_indexes[j] = i;
+		if (strstr((*(kadrs+i))->position, position)) {
+			*(selected_indexes+j) = i;
 			j++;
 		}
 	}
@@ -165,10 +164,10 @@ int main()
 	int j = 0;
 	end_of_file[0] = '\0';
 	for (int i = pos1; i < pos2; i++) {
-		end_of_file[j] = input_file_name[i];
+		*(end_of_file+j) = input_file_name[i];
 		j++;
 		if (i == pos2 - 1) {
-			end_of_file[j] = '\0';
+			*(end_of_file+j) = '\0';
 		}
 	};
 
@@ -176,10 +175,10 @@ int main()
 	output_file = fopen(output_file_name, "w");
 
 	for (int i = 0; i < selected_indexes[0]; i++) {
-		char* surname = kadrs[selected_indexes[i + 1]]->surname;
-		char* position = kadrs[selected_indexes[i + 1]]->position;
-		int experience = kadrs[selected_indexes[i + 1]]->experience;
-		int category = kadrs[selected_indexes[i + 1]]->category;
+		char* surname = kadrs[(*(selected_indexes+(i + 1)))]->surname;
+		char* position = kadrs[(*(selected_indexes + (i + 1)))]->position;
+		int experience = kadrs[(*(selected_indexes + (i + 1)))]->experience;
+		int category = kadrs[(*(selected_indexes + (i + 1)))]->category;
 		fprintf(output_file, "%s %s %i %i\n", surname, position, experience, category);
 	}
 
