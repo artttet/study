@@ -1,0 +1,3 @@
+﻿  Lab_5-16.cpp
+C:\Projects\study\prog-languages-3semestr\Lab_5-16\classes.h(16): warning C4172:  возвращение адреса локальной или временной переменной : str
+  Lab_5-16.vcxproj -> C:\Projects\study\prog-languages-3semestr\Lab_5-16\x64\Debug\Lab_5-16.exe
