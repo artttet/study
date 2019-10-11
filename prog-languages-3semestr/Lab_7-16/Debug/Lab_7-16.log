@@ -1,2 +1,8 @@
 ﻿  Lab_7-16.cpp
+C:\Projects\study\prog-languages-3semestr\Lab_7-16\Lab_7-16.cpp(148,15): warning C4244:  аргумент: преобразование "double" в "int", возможна потеря данных
+C:\Projects\study\prog-languages-3semestr\Lab_7-16\Lab_7-16.cpp(148,12): warning C4244:  аргумент: преобразование "double" в "int", возможна потеря данных
+C:\Projects\study\prog-languages-3semestr\Lab_7-16\Lab_7-16.cpp(166,18): warning C4244:  аргумент: преобразование "double" в "int", возможна потеря данных
+C:\Projects\study\prog-languages-3semestr\Lab_7-16\Lab_7-16.cpp(166,15): warning C4244:  аргумент: преобразование "double" в "int", возможна потеря данных
+C:\Projects\study\prog-languages-3semestr\Lab_7-16\Lab_7-16.cpp(196,15): warning C4244:  аргумент: преобразование "double" в "int", возможна потеря данных
+C:\Projects\study\prog-languages-3semestr\Lab_7-16\Lab_7-16.cpp(196,12): warning C4244:  аргумент: преобразование "double" в "int", возможна потеря данных
   Lab_7-16.vcxproj -> C:\Projects\study\prog-languages-3semestr\Lab_7-16\Debug\Lab_7-16.exe

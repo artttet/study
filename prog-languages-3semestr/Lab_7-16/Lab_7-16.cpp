@@ -1,211 +1,240 @@
 ﻿#define _CRT_SECURE_NO_WARNINGS
 #include <iostream>
+#include "myscan.cpp"
+using namespace std;
 
-class Node {
-private:
-	Node* ptr;
-	int index;
-public:
-	Node(int a, int b) {
-		this->a = a;
-		this->b = b;
-	}
-	~Node(){}
-	int a;
-	int b;
-	
-	void set_index(int index) {
-		this->index = index;
-	}
-
-	int get_index() {
-		return index;
-	}
-
-	void set_ptr(Node node) {
-		ptr = &node;
-	}
-
-	void set_ptr(int t) {
-		ptr = NULL;
-	}
-
-	Node* get_ptr() {
-		return ptr;
-	}
-
-};
-
-Node* new_array_add(Node* old_array, int count) {
-	Node* new_array = (Node*)malloc((count + 1) * sizeof(Node));
-	for (int i = 0; i < count - 1; i++) {
-		new_array[i] = old_array[i];
-	}
-	return new_array;
-}
-
-Node* new_array_delete(Node* old_array, int count, int index) {
-	Node* new_array = (Node*)malloc((count + 1) * sizeof(Node));
-	for (int i = 0; i < count - 1; i++) {
-		if (i == index || i > index) {
-			if (i == count - 2) {
-				break;
-			}
-			new_array[i] = old_array[i + 1];
-			new_array[i].set_index(i);
-		}
-		else {
-			new_array[i] = old_array[i];
-		}
-	}
-	return new_array;
-}
 
 class List {
-public:
-	Node* array_node;
+private:
+	struct Node {
+		int a;
+		int b;
+		Node* next;
+	};
 	Node* start;
 	Node* p;
-	int count;
-	List(int a, int b) {
-		count = 1;
+public:
+	List(int a = 0, int b = 0);
+	~List();
+	void add(int a, int b);
+	void remove();
+	void show();
+	void change(int a, int b);
+	void to_start();
+	void step();
+	void showall();
+	int find();
+};
 
-		array_node = (Node*)malloc(2 * sizeof(Node));
+List::List(int a, int b) {
+	Node* node = new Node;
+	node->a = a;
+	node->b = b;
+	node->next = NULL;
+	
+	start = node;
+	p = node;
+}
 
-		Node obj(a, b);
-		obj.set_ptr(NULL);
-		obj.set_index(count-1);
-		array_node[0] = obj;
+List::~List() {
+	p = start;
+	while (p->next != NULL) p = p->next;
+	while (p != start) List::remove();
+	delete start;
+}
 
+void List::add(int a, int b) {
+	Node* node = new Node;
+	node->a = a;
+	node->b = b;
+	node->next = p->next;
 
-		start = &obj;
-		p = &obj;
+	p->next = node;
+}
 
-		printf("LIST --- a:%d", (*p).a);
+void List::remove() {
+	Node* p0 = start;
+	if (p0 == p) {
+		
+		p0 = p0->next;
+		delete p;
+		p = p0;
+		start = p;
+	}
+	else {
+		while (p0->next != p) p0 = p0->next;
+
+		p0->next = p->next;
+		delete p;
+		p = p0;
 	}
 	
+}
 
-	void add(Node node) {
-		count++;
+void List::show() {
+	cout << endl << "(" << p->a << ", " << p->b << "); " << endl;
+}
 
-		array_node = new_array_add(array_node, count);
+void List::change(int a, int b) {
+	p->a = a;
+	p->b = b;
+}
 
-		(*p).set_ptr(node);
-		node.set_index(count - 1);
-		node.set_ptr(NULL);
-		array_node[count - 1] = node;
-	}
+void List::to_start() {
+	p = start;
+}
 
-	void del() {
-		Node node(0, 0);
-		int index;
-		if (p != start) {
-			index = (*p).get_index();
-			for (int i = 0; i < count; i++) {
-				if (array_node[i].get_index() == (index - 1)) {
-					node = array_node[i];
-				}
-			}
+void List::step() {
+	if (p->next != NULL) p = p->next;
+}
+
+void List::showall() {
+	Node* p0 = start;
+	
+	cout << endl << "Все элементы: ";
+	while (p0 != NULL) {
+		if (p0 == p) {
+			cout << "[" << p0->a << ", " << p0->b << "] ";
 		}
-		else {
-			index = 0;
-			node = array_node[0];
+		else cout << "(" << p0->a << ", " << p0->b << ") ";
+		p0 = p0->next;
+	}
+	cout << endl;
+}
+
+/* 
+	 0 - successful
+	 1 - unsuccessful
+*/
+int List::find() {
+	bool isExist = false;
+	int a, b;
+	Node* p0 = start;
+	Node* last = new Node;
+
+	do {
+		a = p0->a;
+		b = p0->b;
+		if (a + b > 0) {
+			last = p0;
+			isExist = true;
 		}
-		
-		
-		node.set_ptr(*(*p).get_ptr());
-		p = &node;
+		p0 = p0->next;
+	} while (p0 != NULL);
 
-		count--;
-		array_node = new_array_delete(array_node, count, index);
+	if (isExist) {
+		p = last;
+		return 0;
 	}
+	else return 1;
+}
 
-	void print_value() {
-		printf("\nPRINTVALUE --- %d\n", (*p).a);
-		printf("(%d,%d)", (*p).a, (*p).b);
+void main_add(List* list) {
+	double a, b;
+	int status = 0;
+
+	cout << endl;
+	do {
+		status = read_number(&a, "Введите параметр 'а'", 8, "int");
+		if (status != 0) cout << "Попробуйте ещё раз." << endl;
+	} while (status != 0);
+
+	do {
+		status = read_number(&b, "Введите параметр 'b'", 8, "int");
+		if (status != 0) cout << "Попробуйте ещё раз." << endl;
+	} while (status != 0);
+
+	list->add(a, b);
+}
+
+void main_change(List* list) {
+	double a, b;
+	int status = 0;
+
+	cout << endl;
+	do {
+		status = read_number(&a, "Введите параметр 'а' первого элемента", 8, "int");
+		if (status != 0) cout << "Попробуйте ещё раз." << endl;
+	} while (status != 0);
+
+	do {
+		status = read_number(&b, "Введите параметр 'b' первого элемента", 8, "int");
+		if (status != 0) cout << "Попробуйте ещё раз." << endl;
+	} while (status != 0);
+
+	list->change(a, b);
+}
+
+void main_find(List* list) {
+	if (list->find() == 0) {
+		cout << endl << "Найденный элемент:" << endl;
+		list->show();
+		cout << endl;
 	}
-
-	void change_value(int a, int b) {
-		(*p).a = a;
-		(*p).b = b;
+	else {
+		cout << endl << "Элементов, для которых a + b > 0, в списке нет." << endl;
 	}
-
-	void p_to_start() {
-		p = start;
-	}
-
-	void p_to_right() {
-		if ((*p).get_ptr() != NULL) {
-			p = (*p).get_ptr();
-		} else {
-			p = start;
-		}
-	}
-
-	void print() {
-		printf("\n");
-		for (int i = 0; i < count; i++) {
-			if (array_node[i].get_index() == (*p).get_index()) {
-				printf("[%d,%d] ", array_node[i].a, array_node[i].b);
-			}
-			else printf("(%d,%d) ", array_node[i].a, array_node[i].b);
-		}
-		printf("\n");
-	}
-
-	void find() {
-		for (int i = count; i >= 0; i--) {
-			int sum = array_node[i].a + array_node[i].b;
-			if (sum > 0) {
-				p = &array_node[i];
-				break;
-			}else if (i == 0) {
-				printf("\nЭлементов, для которых a+b>0, в списке нет\n");
-			}
-			
-		}
-	}
-
-};
+}
 
 int main() {
 	setlocale(LC_ALL, "Russian");
+	int status = 0;
+	double a, b;
+	double key = 0;
 
-	//int i = 213;
-	//int* p = &i;
-	//int t = *p;
-	//printf("%i", t);
-	//---------------------
-	List list(10, 15);
-	Node* obj = list.start;
-	int a = (*obj).a;
-	int key = 0;
-	Node node1(10, 10);
-	
+	do {
+		status = read_number(&a, "Введите параметр 'а' первого элемента", 8, "int");
+		if (status != 0) cout << "Попробуйте ещё раз." << endl;
+	} while (status != 0);
+
+	do {
+		status = read_number(&b, "Введите параметр 'b' первого элемента", 8, "int");
+		if (status != 0) cout << "Попробуйте ещё раз." << endl;
+	} while (status != 0);
+
+	List list(a, b);
+
 	while (key != 9) {
-		printf("------------------------------------------------------------------------------------------------");
-		printf("\nСодержимое списка: \n");
-		list.print();
-		printf("1.Добавить элемент в очередь.\n");
-		printf("2.Извлечь элемент из начала очереди, предварительно умножив его на среднее арифмитеское элементов очереди. \n");
-		printf("3.Выход из программы.\n");
-		scanf("%d", &key);
+		cout << endl;
+		cout << "1.Добавить элемент." << endl;
+		cout << "2.Удалить элемент." << endl;
+		cout << "3.Показать значения полей текущего элемента." << endl;
+		cout << "4.Поменять значения полей текущего элемента." << endl;
+		cout << "5.Перейти к первому элементу списка." << endl;
+		cout << "6.Перейти к следующему элементу списка." << endl;
+		cout << "7.Вывести все элементы списка." << endl;
+		cout << "8.Найти последний элемент для которого выполняется a+b>0." << endl;
+		cout << "9.Выход из программы." << endl;
 
-		switch (key) {
-		case 1: list.add(node1);
+		do {
+			status = read_number(&key, "Выберите операцию", 1, "int");
+
+			if(status != 0) cout << "Попробуйте ещё раз." << endl;
+		} while (status != 0);
+
+		switch ((int)key) {
+		case 0: cout << endl << "А вы хитрец!" << endl;
 			break;
-		case 2: list.del();
+		case 1: main_add(&list);
 			break;
-		case 3: list.print_value();
+		case 2: list.remove();
 			break;
-		case 4: list.p_to_start();
+		case 3: cout << endl << "Текущий элемент:"; list.show();
 			break;
-		case 5: list.p_to_right();
+		case 4: main_change(&list);
 			break;
-		case 6: list.find();
+		case 5: list.to_start();
 			break;
-		case 7: printf("\n%d\n", a);
+		case 6: list.step();
+			break;
+		case 7: list.showall();
+			break;
+		case 8: main_find(&list);
+			break;
 		}
+		
+
+
 	}
 	
 }
